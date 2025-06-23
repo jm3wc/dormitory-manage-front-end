@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta name="keywords" content="学生宿舍管理系统">
+    <title>学生宿舍管理系统-请登录</title>
+    <link rel="shortcut icon" href="favicon.ico" />
+    <link rel="bookmark" href="favicon.ico" />
+    <script type="text/javascript" language="JavaScript" src="jquery/jquery-3.6.0.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap-grid.min.css">
+    <link type="text/css" rel="stylesheet" href="bootstrap/css/bootstrap-reboot.min.css">
+    <link type="text/css" rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="css/login.css">
+
+    <style>
+        /* 粒子背景动画 */
+        #particles-js {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        .role-selector {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            gap: 20px;
+        }
+
+        .role-option {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .role-card {
+            position: relative;
+            width: 100px;
+            height: 110px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+
+        .role-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            transition: all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+            transform-style: preserve-3d;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 15px 5px;
+            border: 2px solid transparent;
+        }
+
+        .role-option:checked+.role-card-inner {
+            border-color: #4285f4;
+            box-shadow: 0 8px 20px rgba(66, 133, 244, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .role-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #f5f7fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 12px;
+            transition: all 0.4s ease;
+        }
+
+        .role-option:checked+.role-card-inner .role-icon {
+            background: #4285f4;
+        }
+
+        .role-option:checked+.role-card-inner .role-icon i {
+            color: white;
+            transform: scale(1.2);
+        }
+
+        .role-card-inner i {
+            font-size: 24px;
+            color: #5f6368;
+            transition: all 0.4s ease;
+        }
+
+        .role-card-inner span {
+            font-size: 14px;
+            font-weight: 500;
+            color: #202124;
+            transition: all 0.4s ease;
+        }
+
+        .role-option:checked+.role-card-inner span {
+            color: #4285f4;
+        }
+
+        .role-card:hover .role-card-inner {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+        }
+
+        .role-option:checked+.role-card-inner::before {
+            content: "";
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #4285f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .role-option:checked+.role-card-inner::after {
+            content: "✓";
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* 登录表单动画 */
+        #loginform {
+            animation: fadeInUp 0.8s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 0.9;
+                transform: translateY(0);
+            }
+        }
+
+        /* 按钮波纹效果 */
+        .btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border-radius: 25px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 12px 30px;
+            border: none;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            font-size: 14px;
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-info:hover {
+            background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #e085e8 0%, #e04a5c 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 87, 108, 0.6);
+            color: white;
+        }
+
+        .btn:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:after {
+            content: "";
+            display: block;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+            background-repeat: no-repeat;
+            background-position: 50%;
+            transform: scale(10, 10);
+            opacity: 0;
+            transition: transform 0.5s, opacity 0.8s;
+        }
+
+        .btn:active:after {
+            transform: scale(0, 0);
+            opacity: 0.3;
+            transition: 0s;
+        }
+
+        /* 输入框动画 */
+        .form-control {
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .form-control:focus {
+            border-left: 3px solid #4285f4;
+            box-shadow: 0 0 10px rgba(66, 133, 244, 0.2);
+        }
+
+        /* 验证提示信息美化 */
+        .checkinfo {
+            color: #ff4757;
+            font-size: 12px;
+            font-weight: 500;
+            padding: 4px 8px;
+            border-radius: 12px;
+            background: rgba(255, 71, 87, 0.1);
+            border-left: 3px solid #ff4757;
+            margin-top: 2px;
+            display: inline-block;
+            position: relative;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .checkinfo.show {
+            opacity: 1;
+            visibility: visible;
+            animation: slideIn 0.3s ease;
+        }
+
+        .checkinfo::before {
+            content: "⚠ ";
+            margin-right: 4px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 输入框组样式优化 */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group-addon {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 1px solid #dee2e6;
+            border-right: none;
+        }
+
+        /* 标题动画 */
+        #header h2 {
+            position: relative;
+            display: inline-block;
+            animation: titleGlow 3s ease-in-out infinite alternate;
+            color: #ffffff;
+            font-size: 28px;
+            font-weight: 800;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3);
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+        }
+
+        #header h2:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px rgba(255, 255, 255, 0.5);
+        }
+
+        @keyframes shimmer {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        @keyframes titleGlow {
+            from {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.3);
+            }
+
+            to {
+                text-shadow: 0 0 15px rgba(255, 255, 255, 0.8), 0 0 25px rgba(255, 255, 255, 0.5), 0 0 35px rgba(255, 255, 255, 0.3);
+            }
+        }
+    </style>
+
+    <script type="text/javascript" language="JavaScript">
+        $(function () {
+            localStorage.setItem("account", '');
+            localStorage.setItem("type", '');
+        });
+    </script>
+</head>
+
+<body>
+    <div id="particles-js"></div>
+    <header id="header">
+        <div class="container-fluid">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-sm-12 text-center">
+                    <h3><i class="fa fa-graduation-cap mr-2"></i> 学生宿舍管理系统</h3>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div id="loginWrapper">
+        <div id="loginform" class="card col-sm-5">
+            <div class="card-header">
+                <h3 align="center">欢迎使用</h3>
+                <h3 align="center">如此页面背景和身份选择样式无变化<br>请按Ctrl+F5刷新浏览器缓存</h3>
+            </div>
+            <div class="card-body">
+                <form>
+                    <div class="modern-input-group">
+                        <i class="fa fa-user"></i>
+                        <input id="account" class="modern-input" type="text" required placeholder=" "
+                            onfocus="handleInputFocus('account')" onblur="checkInputInfoNull('account')">
+                        <label for="account">账号</label>
+                        <div id="accountCheckInfo" class="checkinfo"></div>
+                    </div>
+                    <div class="modern-input-group">
+                        <i class="fa fa-lock"></i>
+                        <input id="password" class="modern-input" type="password" required placeholder=" "
+                            onfocus="handleInputFocus('password')" onblur="checkInputInfoNull('password')">
+                        <label for="password">密码</label>
+                        <div id="passwordCheckInfo" class="checkinfo"></div>
+                    </div>
+                    <div class="modern-input-group">
+                        <i class="fa fa-shield"></i>
+                        <input id="captcha" class="modern-input" type="text" required placeholder=" ">
+                        <label for="captcha">验证码</label>
+                        <button id="captchaButton" type="button" onclick="initCaptcha()">
+                            <img id="captchaImg" width="100%" height="100%" loading="lazy" src='/captcha'>
+                        </button>
+                    </div>
+
+                    <div class="role-selector">
+                        <label class="role-card">
+                            <input type="radio" class="role-option" id="radio-1" name="type" value="3" />
+                            <div class="role-card-inner">
+                                <div class="role-icon">
+                                    <i class="fa fa-graduation-cap"></i>
+                                </div>
+                                <span>学生</span>
+                            </div>
+                        </label>
+                        <label class="role-card">
+                            <input type="radio" class="role-option" id="radio-2" name="type" value="2" />
+                            <div class="role-card-inner">
+                                <div class="role-icon">
+                                    <i class="fa fa-home"></i>
+                                </div>
+                                <span>宿管</span>
+                            </div>
+                        </label>
+                        <label class="role-card">
+                            <input type="radio" class="role-option" id="radio-3" name="type" value="1" />
+                            <div class="role-card-inner">
+                                <div class="role-icon">
+                                    <i class="fa fa-user-circle"></i>
+                                </div>
+                                <span>管理员</span>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="form-group input-group">
+                        <div class="col-sm-1">&nbsp;</div>
+                        <button type="button" class="btn btn-info col-sm-4" onclick="login()"><i
+                                class="fa fa-arrow-right"></i> 登&nbsp;陆
+                        </button>
+                        <div class="col-sm-2"></div>
+                        <button type="reset" class="btn btn-danger col-sm-4"><i class="fa fa-rotate-left"></i> 重&nbsp;置
+                        </button>
+                        <div class="col-sm-1">&nbsp;</div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer id="footer">
+        <h4>版权声明 <i class="fa fa-copyright"></i>34号成文龙</h4>
+    </footer>
+    <script type="text/javascript" language="JavaScript" src="bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" language="JavaScript" src="bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" language="JavaScript" src="sweetalert/sweetalert.min.js"></script>
+    <script type="text/javascript" language="JavaScript" src="js/login.js"></script>
+    <!-- 添加粒子动画JS -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        window.addEventListener('DOMContentLoaded', function () {
+            if (window.particlesJS) {
+                particlesJS('particles-js', {
+                    "particles": {
+                        "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                        "color": { "value": "#ffffff" },
+                        "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" } },
+                        "opacity": { "value": 0.5, "random": false },
+                        "size": { "value": 3, "random": true },
+                        "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.4, "width": 1 },
+                        "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+                    },
+                    "interactivity": {
+                        "detect_on": "canvas",
+                        "events": {
+                            "onhover": { "enable": true, "mode": "grab" },
+                            "onclick": { "enable": true, "mode": "push" },
+                            "resize": true
+                        },
+                        "modes": {
+                            "grab": { "distance": 140, "line_linked": { "opacity": 1 } },
+                            "push": { "particles_nb": 4 }
+                        }
+                    },
+                    "retina_detect": true
+                });
+            } else {
+                console.error('particlesJS not loaded');
+            }
+        });
+    </script>
+</body>
+
+</html>
